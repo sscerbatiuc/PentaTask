@@ -7,11 +7,17 @@ spl_autoload_register('AutoLoader::ClassLoader');
 Helper::displayInfoMessage("Helper class loaded successfully");
 
 $factory = AutomobileFactory::getInstance();
+//$vehicleStore = VehicleStore::getInstance();
 
 $newAClassCar = $factory->createVehicle("a");
 $newBClassCar = $factory->createVehicle("b");
-$newAClassCar->getGeneralInformation();
-$newBClassCar->getGeneralInformation();
+$newBClassCar = $factory->createVehicle("c");
+$newBClassCar = $factory->createVehicle("e");
+$newBClassCar = $factory->createVehicle("s");
+
+
+//$newAClassCar->getGeneralInformation();
+//$newBClassCar->getGeneralInformation();
 //$newAClassCar->visualiseSpecifications();
 //
 //$xenon = new Specs("Xenon", 500);
@@ -28,4 +34,6 @@ $newBClassCar->getGeneralInformation();
 //$newAClassCar->visualiseSpecifications();
 //
 //echo 'Recalculated price: '.$newAClassCar->calculatePrice().'&#8364';
-
+//
+//
+////phpinfo();

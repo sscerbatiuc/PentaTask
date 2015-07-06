@@ -37,6 +37,10 @@ abstract class Automobile {
         $this->vehiclePrice = $vehiclePrice;
     }
 
+    /**
+     * Task 7 - pentru orice masina sa se poata vizualiza pretul
+     * @return String
+     */
     public function calculatePrice() {
         $recalculatedPrice = $this->getVehiclePrice();
 
@@ -61,32 +65,6 @@ abstract class Automobile {
 
         $this->viewDefaultSpecs();
         $this->viewOptionalSpecs();
-    }
-
-    public function assignDefaultSpecs($specsArray) {
-        $this->defaultSpecs = new SplObjectStorage();
-        foreach ($specsArray as $defSpec) {
-            $this->defaultSpecs->attach($defSpec);
-        }
-    }
-
-    public function equipOptionalSpec($optionalSpec) {
-        if ($this->optionalSpecs->contains($optionalSpec) == FALSE) {
-            $this->optionalSpecs->attach($optionalSpec);
-        } else {
-            Helper::displayErrorMessage("The specification you are about to insert already exists");
-        }
-    }
-
-    public function equipMultipleOptionalSpecs($optionalSpecsArray) {
-        try {
-            foreach ($optionalSpecsArray as $optionalSpec) {
-                echo 'Attempting to add optional spec: ' . $optionalSpec->getName();
-                $this->optionalSpecs->attach($optionalSpec);
-            }
-        } catch (Exception $ex) {
-            echo $ex->getTraceAsString();
-        }
     }
 
     public function viewDefaultSpecs() {
@@ -116,9 +94,37 @@ abstract class Automobile {
         }
         Helper::displayInfoMessage($optionalSpecList);
     }
+    
+    abstract function equipCar();
+
+    public function assignDefaultSpecs($specsArray) {
+        $this->defaultSpecs = new SplObjectStorage();
+        foreach ($specsArray as $defSpec) {
+            $this->defaultSpecs->attach($defSpec);
+        }
+    }
+
+    public function equipOptionalSpec($optionalSpec) {
+        if ($this->optionalSpecs->contains($optionalSpec) == FALSE) {
+            $this->optionalSpecs->attach($optionalSpec);
+        } else {
+            Helper::displayErrorMessage("The specification you are about to insert already exists");
+        }
+    }
+
+    public function equipMultipleOptionalSpecs($optionalSpecsArray) {
+        try {
+            foreach ($optionalSpecsArray as $optionalSpec) {
+                echo 'Attempting to add optional spec: ' . $optionalSpec->getName();
+                $this->optionalSpecs->attach($optionalSpec);
+            }
+        } catch (Exception $ex) {
+            echo $ex->getTraceAsString();
+        }
+    }
 
     public function deleteSpec($spec) {
-        
+
         Helper::displayInfoMessage("Deleting optional specifications");
 
         if ($this->optionalSpecs == NULL) {

@@ -17,5 +17,9 @@ abstract class Reduceri {
         }
     }
     
+    public function calculateDiscount($carPrice){
+        //TODO define how to calculate the discount sum
+    }
+    
 }
 

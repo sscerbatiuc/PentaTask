@@ -8,11 +8,10 @@ class A_class extends Automobile {
     public function __construct() {
         Helper::displayInfoMessage("A-Class construct");
         parent::__construct("A-Class", 16000);
-        self::equipVehicle();
+        self::equipCar();
     }
 
-    public function equipVehicle() {
-        Helper::displayInfoMessage("Equipping vehicle: ...OK");
+    public function equipCar() {
         $aerConditionat = new Specs("Aer conditionat");
         $airBag = new Specs("Airbag", 0, 6);
         $defaultSpecs = array($aerConditionat, $airBag);
