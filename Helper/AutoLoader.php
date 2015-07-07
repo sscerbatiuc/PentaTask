@@ -6,13 +6,15 @@ class AutoLoader{
         
         require_once 'Model/Vehicle/Automobile.php';
         require_once 'Model/AutomobileFactory.php';
-        require_once 'Model/Vehicle/A_class.php';
-        require_once 'Model/Vehicle/B_class.php';
-        require_once 'Model/Vehicle/C_class.php';
-        require_once 'Model/Vehicle/E_class.php';
-        require_once 'Model/Vehicle/S_class.php';
+        require_once 'Model/Vehicle/AClass.php';
+        require_once 'Model/Vehicle/BClass.php';
+        require_once 'Model/Vehicle/CClass.php';
+        require_once 'Model/Vehicle/EClass.php';
+        require_once 'Model/Vehicle/SClass.php';
         require_once 'Model/Discount/Reduceri.php';
-        require_once 'Model/Specs.php';
+        require_once 'Model/Discount/OrderInterface.php';
+        require_once 'Model/Specifications/Spec.php';
+        require_once 'Model/Specifications/SpecStorage.php';
         require_once 'Model/VehicleStore.php';
     }
 }

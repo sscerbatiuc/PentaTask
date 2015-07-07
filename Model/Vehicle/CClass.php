@@ -1,6 +1,6 @@
 <?php
 
-class C_class extends Automobile {
+class CClass extends Automobile {
 
     public function __construct() {
         parent::__construct("C-Class", 28000);
@@ -10,9 +10,9 @@ class C_class extends Automobile {
 
     public function equipCar() {
         
-        $clima = new Specs("Climate-Control");
-        $airBag = new Specs("Airbag", 0, 6);
-        $cruiseControl = new Specs("Cruise-Control");
+        $clima = new Spec("Climate-Control");
+        $airBag = new Spec("Airbag", 0, 6);
+        $cruiseControl = new Spec("Cruise-Control");
         
         $cClassDefSpecs = array($clima,$airBag,$cruiseControl);
         $this->assignDefaultSpecs($cClassDefSpecs);

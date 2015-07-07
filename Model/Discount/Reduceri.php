@@ -1,6 +1,6 @@
 <?php
 
-abstract class Reduceri {
+class Reduceri implements OrderingInterface{
     
     private $periodStart;
     private $periodFinish;
@@ -20,6 +20,10 @@ abstract class Reduceri {
     public function calculateDiscount($carPrice){
         //TODO define how to calculate the discount sum
     }
-    
+
+    public function getOrder() {
+        
+    }
+
 }
 

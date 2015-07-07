@@ -7,7 +7,7 @@ spl_autoload_register('AutoLoader::ClassLoader');
 Helper::displayInfoMessage("Helper class loaded successfully");
 
 $factory = AutomobileFactory::getInstance();
-//$vehicleStore = VehicleStore::getInstance();
+$vehicleStore = VehicleStore::getInstance();
 
 $newAClassCar = $factory->createVehicle("a");
 $newBClassCar = $factory->createVehicle("b");
@@ -15,6 +15,7 @@ $newBClassCar = $factory->createVehicle("c");
 $newBClassCar = $factory->createVehicle("e");
 $newBClassCar = $factory->createVehicle("s");
 
+$vehicleStore->viewAvailableCars();
 
 //$newAClassCar->getGeneralInformation();
 //$newBClassCar->getGeneralInformation();

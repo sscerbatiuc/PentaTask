@@ -1,13 +1,12 @@
 <?php
 
-class Specs {
+class Spec {
 
     private $nameSpec;
     private $price;
     private $quantity;
 
     //  CONSTRUCTORS
-
     public function __construct($name, $price = 0, $qty = 1) {
         $this->setNameSpec($name);
         if ($price > 0) {
@@ -19,7 +18,6 @@ class Specs {
     }
 
     //  GETTERS
-
     function getNameSpec() {
         return $this->nameSpec;
     }
@@ -34,7 +32,6 @@ class Specs {
     }
 
     //  SETTERS
-
     public function setNameSpec($nameSpec) {
         $this->nameSpec = $nameSpec;
     }

@@ -15,6 +15,11 @@ abstract class Automobile {
         $this->optionalSpecs = new SplObjectStorage();
     }
 
+    /**
+     * 
+     */
+    abstract function equipCar();
+
     //GETTERS
     function getVehicleMake() {
         return $this->vehicleMake;
@@ -52,21 +57,26 @@ abstract class Automobile {
         return $recalculatedPrice;
     }
 
-    public function getGeneralInformation() {
-        $generalInfo = '<strong> GENERAL INFORMATION: </strong><br>'
+    public function __toString() {
+        $generalInfo = '<br><strong> GENERAL INFORMATION: </strong><br>'
                 . ' <strong>Make:</strong> ' . $this->vehicleMake
                 . ' <strong>Class:</strong> ' . $this->vehicleClass
                 . '  <strong>Initial price:</strong> ' . $this->vehiclePrice . '&#8364';
-        Helper::displayInfoMessage($generalInfo);
+        return $generalInfo;
     }
 
-    //Task IV - view options for each car
+    /**
+     * TASK IV - view options for each car
+     */
     public function visualiseSpecifications() {
 
         $this->viewDefaultSpecs();
         $this->viewOptionalSpecs();
     }
-
+    
+    /**
+     * Visualise the default specifications of the car
+     */
     public function viewDefaultSpecs() {
         $defaultSpecList = "Default specifications:";
         foreach ($this->defaultSpecs as $spec) {
@@ -78,6 +88,9 @@ abstract class Automobile {
         Helper::displayInfoMessage($defaultSpecList);
     }
 
+    /**
+     * Visualise the optional specifications of the car
+     */
     public function viewOptionalSpecs() {
         $optionalSpecList = "Optional Specifications:";
         if ($this->optionalSpecs == NULL) {
@@ -94,9 +107,11 @@ abstract class Automobile {
         }
         Helper::displayInfoMessage($optionalSpecList);
     }
-    
-    abstract function equipCar();
 
+    /**
+     * Assign the default specifications of a vehicle
+     * @param Spec[] $specsArray
+     */
     public function assignDefaultSpecs($specsArray) {
         $this->defaultSpecs = new SplObjectStorage();
         foreach ($specsArray as $defSpec) {
@@ -104,6 +119,10 @@ abstract class Automobile {
         }
     }
 
+    /**
+     * Adds the optional specification to the Vehicle
+     * @param Spec $optionalSpec
+     */
     public function equipOptionalSpec($optionalSpec) {
         if ($this->optionalSpecs->contains($optionalSpec) == FALSE) {
             $this->optionalSpecs->attach($optionalSpec);
@@ -112,6 +131,10 @@ abstract class Automobile {
         }
     }
 
+    /**
+     * Adds multiple optional specifications to the Vehicle
+     * @param Spec[] $optionalSpecsArray
+     */
     public function equipMultipleOptionalSpecs($optionalSpecsArray) {
         try {
             foreach ($optionalSpecsArray as $optionalSpec) {
@@ -123,7 +146,13 @@ abstract class Automobile {
         }
     }
 
-    public function deleteSpec($spec) {
+    /**
+     * Checks if a specification is assigned to the vehicle -> deletes it
+     * @param type $specification
+     */
+    //TODO redefine the logic of deleting optional specifications
+    /* Deleting specifications by name: check if a specification with specific SLUG exists */
+    public function deleteSpec(Spec $specification) {
 
         Helper::displayInfoMessage("Deleting optional specifications");
 
@@ -131,13 +160,13 @@ abstract class Automobile {
 
             $this->optionalSpecs = new SplObjectStorage();
         }
-        if ($this->optionalSpecs->contains($spec)) {
+        if ($this->optionalSpecs->contains($specification)) {
 
             Helper::displayInfoMessage("You are about to remove the specification:"
-                    . $spec->getNameSpec() . " Price:" . $spec->getPrice() . "&#8364");
-            $this->optionalSpecs->detach($spec);
+                    . $specification->getNameSpec() . " Price:" . $specification->getPrice() . "&#8364");
+            $this->optionalSpecs->detach($specification);
         } else {
-            Helper::displayErrorMessage("This car is not equipped with:" . $spec->getNameSpec());
+            Helper::displayErrorMessage("This car is not equipped with:" . $specification->getNameSpec());
         }
     }
 

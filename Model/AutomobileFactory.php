@@ -4,23 +4,30 @@ require_once 'Helper/AutoLoader.php';
 spl_autoload_register('AutoLoader::ClassLoader');
 
 class AutomobileFactory {
-    
+
     private $vehicleStore;
 
+    /**
+     * (Singleton Pattern)
+     * Returns only one instance of the class
+     * @staticvar type $instance
+     * @return \static
+     */
     public static function getInstance() {
         static $instance = null;
         if ($instance == null) {
             $instance = new static();
-            
         }
         return $instance;
     }
 
     protected function __construct() {
-        Helper::displaySuccessMessage("Automobile Factory Constructor has been called successfully.");
+        //Helper::displaySuccessMessage("Automobile Factory Constructor has been called successfully.");
+        //Get the instance of the vehicleStore object where all the vehicles are stored 
         $this->vehicleStore = VehicleStore::getInstance();
     }
-
+    
+    //Prevent cloning the instance of the object AutomobileFactory - Singleton pattern    
     private function __clone() {
         
     }
@@ -29,15 +36,21 @@ class AutomobileFactory {
         
     }
 
+    /**
+     * Creates a vehicle of specific Class based on the user input: A,B,C,E,S
+     * @param type $inputVehicleClass
+     * @return \vehicle
+     */
     public function createVehicle($inputVehicleClass) {
         $vehicleClass = ucfirst($inputVehicleClass);
-        $vehicle = $vehicleClass . "_class";
+        $vehicle = $vehicleClass . "Class";
         if (class_exists($vehicle)) {
-            VehicleStore::addVehicle(new $vehicle($inputVehicleClass));
-            return new $vehicle($inputVehicleClass);
+            $newVehicle = new $vehicle($inputVehicleClass);
+            $this->vehicleStore->addVehicle($newVehicle);
+            return $newVehicle;
         } else {
 
-            Helper::displayErrorMessage("The vehicle (".$vehicle.") couldn't be created.");
+            Helper::displayErrorMessage("The vehicle (" . $vehicle . ") couldn't be created.");
             return NULL;
         }
     }
