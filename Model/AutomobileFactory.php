@@ -24,7 +24,7 @@ class AutomobileFactory {
     protected function __construct() {
         //Helper::displaySuccessMessage("Automobile Factory Constructor has been called successfully.");
         //Get the instance of the vehicleStore object where all the vehicles are stored 
-        $this->vehicleStore = VehicleStore::getInstance();
+//        $this->vehicleStore = VehicleStore::getInstance();
     }
     
     //Prevent cloning the instance of the object AutomobileFactory - Singleton pattern    
@@ -36,17 +36,15 @@ class AutomobileFactory {
         
     }
 
-    /**
-     * Creates a vehicle of specific Class based on the user input: A,B,C,E,S
-     * @param type $inputVehicleClass
-     * @return \vehicle
+    /** Creates a vehicle of specific Class based on the user input: A,B,C,E,S
+     * @param String $className
+     * @return Automobile
      */
     public function createVehicle($inputVehicleClass) {
         $vehicleClass = ucfirst($inputVehicleClass);
         $vehicle = $vehicleClass . "Class";
         if (class_exists($vehicle)) {
             $newVehicle = new $vehicle($inputVehicleClass);
-            $this->vehicleStore->addVehicle($newVehicle);
             return $newVehicle;
         } else {
 

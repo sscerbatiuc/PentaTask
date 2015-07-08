@@ -43,5 +43,9 @@ class Spec {
     public function setQuantity($quantity) {
         $this->quantity = $quantity;
     }
+    
+    public function __toString() {
+        return "</br><strong>Specification: </strong> Name:".$this->getNameSpec()." Price:".$this->getPrice()." Quantity:".$this->getQuantity();
+    }
 
 }

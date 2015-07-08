@@ -43,8 +43,9 @@ abstract class Automobile {
     }
 
     /**
-     * Task 7 - pentru orice masina sa se poata vizualiza pretul
-     * @return String
+     * Calculates the price of the vehicle with all the optional specifications 
+     * included
+     * @return string
      */
     public function calculatePrice() {
         $recalculatedPrice = $this->getVehiclePrice();
@@ -56,7 +57,12 @@ abstract class Automobile {
 
         return $recalculatedPrice;
     }
-
+    
+    /**
+     * Displays the general information about the vehicle:
+     * Make, Class, Price
+     * @return string
+     */
     public function __toString() {
         $generalInfo = '<br><strong> GENERAL INFORMATION: </strong><br>'
                 . ' <strong>Make:</strong> ' . $this->vehicleMake
@@ -68,7 +74,7 @@ abstract class Automobile {
     /**
      * TASK IV - view options for each car
      */
-    public function visualiseSpecifications() {
+    public function viewAllSpecifications() {
 
         $this->viewDefaultSpecs();
         $this->viewOptionalSpecs();
@@ -110,7 +116,7 @@ abstract class Automobile {
 
     /**
      * Assign the default specifications of a vehicle
-     * @param Spec[] $specsArray
+     * @param array
      */
     public function assignDefaultSpecs($specsArray) {
         $this->defaultSpecs = new SplObjectStorage();

@@ -2,8 +2,10 @@
 
 class EClass extends Automobile {
 
-    const className = "E-Class";
-    const classPrice = 40000;
+    const className     = "E-Class";
+    const classPrice    = 40000;
+    const airCondType   = "clima";
+    const airBagNumber  = 8;
 
     public function __construct() {
         
@@ -13,14 +15,12 @@ class EClass extends Automobile {
     }
 
     public function equipCar() {
-        $clima = new Spec("Climate-Control");
-        $cruiseControl = new Spec("Cruise-Control");
-        $xenon = new Spec("Xenon");
-        $rainSens = new Spec("Senzori de ploaie");
-        $airBag = new Spec("Airbag", 0, 8);
-        $parctronics = new Spec("Parctronics");
-
-        $eClassDefSpecs = array($clima, $cruiseControl, $xenon, $rainSens, $airBag, $parctronics);
+         $eClassDefSpecs =  SpecStorage::getCommonSpecifications();
+        array_push($eClassDefSpecs, SpecStorage::getSpecification(self::airCondType));
+        array_push($eClassDefSpecs, SpecStorage::getSpecification("airbag",  self::airBagNumber));
+        array_push($eClassDefSpecs, SpecStorage::getSpecification("cruise"));
+        array_push($eClassDefSpecs, SpecStorage::getSpecification("parktronic"));
+        array_push($eClassDefSpecs, SpecStorage::getSpecification("senzor-ploaie"));
         $this->assignDefaultSpecs($eClassDefSpecs);
     }
 

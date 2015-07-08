@@ -4,6 +4,8 @@ class SClass extends Automobile {
 
     const className = "S-Class";
     const classPrice = 55000;
+    const airCondType = "climaZona";
+    const airBagNumber = 10;
 
     public function __construct() {
         Helper::displayInfoMessage("S-Class constructor");
@@ -12,18 +14,20 @@ class SClass extends Automobile {
     }
 
     public function equipCar() {
-        $clima = new Spec("Climate-Control (2 zones)");
-        $xenon = new Spec("Xenon");
-        $electricSeats = new Spec("Scaune reglate electric");
-        $boardComputer = new Spec("Caclulator de bord");
-        $lightSens = new Spec("Senzori de lumina");
-        $airBag = new Spec("Airbag", 0, 10);
-        $leather = new Spec("Salon de piele");
-        $parctronic = new Spec("Parctronics");
-        $cruiseControl = new Spec("Cruise-control");
+        $sClassDefSpecs = SpecStorage::getCommonSpecifications();
 
-        $sClassDefSpec = array($clima, $xenon, $electricSeats, $boardComputer, $lightSens, $airBag, $leather, $parctronic, $cruiseControl);
-        $this->assignDefaultSpecs($sClassDefSpec);
+        array_push($sClassDefSpecs, SpecStorage::getSpecification(self::airCondType));
+        array_push($sClassDefSpecs, SpecStorage::getSpecification("airbag", self::airBagNumber));
+        array_push($sClassDefSpecs, SpecStorage::getSpecification("xenon"));
+        array_push($sClassDefSpecs, SpecStorage::getSpecification("scaune"));
+        array_push($sClassDefSpecs, SpecStorage::getSpecification("senzor-lumina"));
+        array_push($sClassDefSpecs, SpecStorage::getSpecification("senzor-ploaie"));
+        array_push($sClassDefSpecs, SpecStorage::getSpecification("piele"));
+        array_push($sClassDefSpecs, SpecStorage::getSpecification("parktronic"));
+        array_push($sClassDefSpecs, SpecStorage::getSpecification("calculator"));
+        array_push($sClassDefSpecs, SpecStorage::getSpecification("cruise"));
+
+        $this->assignDefaultSpecs($sClassDefSpecs);
     }
 
 }

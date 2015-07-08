@@ -1,20 +1,24 @@
 <?php
 
 class CClass extends Automobile {
-
+    
+    const className     = "C-Class";
+    const classPrice    = 28000;
+    const airCondType   = "clima";
+    const airBagNumber  = 6;
+    
     public function __construct() {
-        parent::__construct("C-Class", 28000);
-        Helper::displayInfoMessage("C-Class construct");
+        Helper::displayInfoMessage("C-Class constructor");
+        parent::__construct(self::className, self::classPrice);
         $this->equipCar();
     }
 
     public function equipCar() {
         
-        $clima = new Spec("Climate-Control");
-        $airBag = new Spec("Airbag", 0, 6);
-        $cruiseControl = new Spec("Cruise-Control");
-        
-        $cClassDefSpecs = array($clima,$airBag,$cruiseControl);
+        $cClassDefSpecs =  SpecStorage::getCommonSpecifications();
+        array_push($cClassDefSpecs, SpecStorage::getSpecification(self::airCondType));
+        array_push($cClassDefSpecs, SpecStorage::getSpecification("airbag",  self::airBagNumber));
+        array_push($cClassDefSpecs, SpecStorage::getSpecification("cruise"));
         $this->assignDefaultSpecs($cClassDefSpecs);
     }
 

@@ -2,12 +2,22 @@
 
 class SpecStorage{
     
-    private $instance;
-
-    const airCondName       = "Air conditioning";
+    /**
+     * Default specifications for all the cars
+     */
+    const mp3Name           = "MP3 Player";
+    const elecMirrorName    = "Electric mirrors";
+    const lockName          = "Central lock";
+    const elecWindowName    = "Electric Windows";
+    const fogLightsName     = "Fog Lights";
+    const heatMirrorName    = "Heated Mirrors";
+    
+    /**
+     * Optional Specifications
+     */
     const xenonName         = "Xenon";
     const steerWheelName    = "Multifunctional Steering Wheel";
-    const parkName          = "Parktronics";
+    const parkName          = "Parktronic";
     const lightSensName     = "Light Sensor";
     const rainSensName      = "Rain Sensor";
     const theftAlarmName    = "Anti Theft Alarm";
@@ -16,6 +26,17 @@ class SpecStorage{
     const cruControlName    = "Cruise Control";
     const boardComputerName = "Board Computer";
     
+    const airCondName       = "Air conditioning";
+    const climateName       = "Climate Control";
+    const zonalClimateName  = "Climate Control with 2 zones";
+    const airbagName        = "Airbags";
+    const leatherSeatsName  = "Leather Seats";
+    const electricAdjustName = "Seats with electrical adjustment";
+    
+    
+    /**
+     * Optional Specifications Price
+     */
     const xenonPrice            = 500;
     const stWheelPrice          = 600;
     const parkPrice             = 250;
@@ -27,46 +48,63 @@ class SpecStorage{
     const cruControlPrice       = 1000;
     const boardComputerPrice    = 1500;
     
-    private $availableSpecifications = array(        
-        "airbag"        => array("Name" => self::airCondName, "Price" => 0,"Quantity" => 6),
+    private static $commonSpecifications = array(
+        "mp3"       => array("Name" => self::mp3Name , "Price" => 0, "Quantity" => 1),
+        "eMirror"   => array("Name" => self::elecMirrorName , "Price" => 0, "Quantity" => 2),
+        "lock"      => array("Name" => self::lockName , "Price" => 0, "Quantity" => 1),
+        "eWindow"   => array("Name" => self::elecWindowName, "Price" => 0, "Quantity" => 4),
+        "fog"       => array("Name" => self::fogLightsName, "Price" => 0, "Quantity" => 2),
+        "hMirror"   => array("Name" => self::heatMirrorName, "Price" => 0, "Quantity" => 2)        
+    );
+    
+    private static $optionalSpecifications = array(
+        "cond"          => array("Name" => self::airCondName, "Price" => 0, "Quantity" => 1),
+        "clima"         => array("Name" => self::climateName, "Price" => 0, "Quantity" => 1),
+        "climaZona"     => array("Name" => self::zonalClimateName, "Price" => 0, "Quantity" => 1),
+        "airbag"        => array("Name" => self::airbagName, "Price" => 0, "Quantity" => 6),
+        "piele"         => array("Name" => self::leatherSeatsName, "Price" => 0, "Quantity" => 1),
+        "scaune"        => array("Name" => self::electricAdjustName, "Price" => 0, "Quantity" => 2),
         "xenon"         => array("Name" => self::xenonName, "Price"=> self::xenonPrice, "Quantity" => 1),
         "volan"         => array("Name" => self::steerWheelName, "Price" => self::stWheelPrice, "Quantity" => 1),
-        "parctronics"   => array("Name" => self::parkName, "Price" => self::parkPrice, "Quantity" => 1),
+        "parktronic"    => array("Name" => self::parkName, "Price" => self::parkPrice, "Quantity" => 1),
         "senzor-lumina" => array("Name" => self::lightSensName, "Price" => self::lightSensPrice, "Quantity" => 1),
         "senzor-ploaie" => array("Name" => self::rainSensName, "Price" => self::rainSensPrice, "Quantity" => 1),
         "alarma"        => array("Name" => self::theftAlarmName, "Price" => self::theftAlarmPrice, "Quantity" => 1),
         "jante"         => array("Name" => self::rimsName, "Price" => self::rimsPrice, "Quantity" => 4),
         "scaune"        => array("Name" => self::heatedSeatsName, "Price" => self::heatSeatsPrice, "Quantity" => 4),
         "cruise"        => array("Name" => self::cruControlName, "Price" => self::cruControlPrice, "Quantity" => 1),
-        "calculator"   => array("Name" => self::boardComputerName, "Price" => self::boardComputerPrice, "Quantity" => 1)
+        "calculator"    => array("Name" => self::boardComputerName, "Price" => self::boardComputerPrice, "Quantity" => 1)
     );
     
-    public static function getInstance() {
-        if (NULL === static::$instance) {
-            static::$instance = new static();
+    /**
+     * Returns an array with the specifications common for all the cars
+     * @return array
+     */
+    public static function getCommonSpecifications(){
+        $defSpecs = array();
+        
+        foreach (self::$commonSpecifications as $spec => $specDetails) {
+            array_push($defSpecs, new Spec($specDetails["Name"],$specDetails["Price"],$specDetails["Quantity"]));
         }
-        return static::$instance;
+        
+        return $defSpecs;
     }
     
-    protected function __construct() {
+    /**
+     * Returns a Spec (specification) object depending on user input
+     * @param Specification Name
+     * @return Spec
+     */
+    public static function getSpecification($nameSpec, $default = NULL){
         
-        
-    }
-    
-    private function __clone() {
-        
-    }
-    
-    private function __wakeup() {
-        
-    }
-    
-    public function getSpecification($nameSpec){
-        
-        if(isset($this->availableSpecifications[$nameSpec])){
-            return new Spec($this->availableSpecifications[$nameSpec]["Name"],
-                            $this->availableSpecifications[$nameSpec]["Price"],
-                            $this->availableSpecifications[$nameSpec]["Quantity"]);
+        if(isset(self::$optionalSpecifications)){
+            return new Spec(self::$optionalSpecifications[$nameSpec]["Name"],
+                            self::$optionalSpecifications[$nameSpec]["Price"],
+                            (isset($default) ? $default : self::$optionalSpecifications[$nameSpec]["Quantity"]));
+        }
+        else{
+            Helper::displayErrorMessage("The specification (".$nameSpec.") doesn't exist");
+            return NULL;
         }
         
     }
