@@ -63,7 +63,7 @@ class SpecStorage{
         "climaZona"     => array("Name" => self::zonalClimateName, "Price" => 0, "Quantity" => 1),
         "airbag"        => array("Name" => self::airbagName, "Price" => 0, "Quantity" => 6),
         "piele"         => array("Name" => self::leatherSeatsName, "Price" => 0, "Quantity" => 1),
-        "scaune"        => array("Name" => self::electricAdjustName, "Price" => 0, "Quantity" => 2),
+        "scauneRegl"    => array("Name" => self::electricAdjustName, "Price" => 0, "Quantity" => 2),
         "xenon"         => array("Name" => self::xenonName, "Price"=> self::xenonPrice, "Quantity" => 1),
         "volan"         => array("Name" => self::steerWheelName, "Price" => self::stWheelPrice, "Quantity" => 1),
         "parktronic"    => array("Name" => self::parkName, "Price" => self::parkPrice, "Quantity" => 1),
@@ -71,7 +71,7 @@ class SpecStorage{
         "senzor-ploaie" => array("Name" => self::rainSensName, "Price" => self::rainSensPrice, "Quantity" => 1),
         "alarma"        => array("Name" => self::theftAlarmName, "Price" => self::theftAlarmPrice, "Quantity" => 1),
         "jante"         => array("Name" => self::rimsName, "Price" => self::rimsPrice, "Quantity" => 4),
-        "scaune"        => array("Name" => self::heatedSeatsName, "Price" => self::heatSeatsPrice, "Quantity" => 4),
+        "scauneIncalz"  => array("Name" => self::heatedSeatsName, "Price" => self::heatSeatsPrice, "Quantity" => 4),
         "cruise"        => array("Name" => self::cruControlName, "Price" => self::cruControlPrice, "Quantity" => 1),
         "calculator"    => array("Name" => self::boardComputerName, "Price" => self::boardComputerPrice, "Quantity" => 1)
     );
@@ -107,5 +107,10 @@ class SpecStorage{
             return NULL;
         }
         
+    }
+    
+    public static function checkSpec($nameSpec){
+        $result = array_key_exists($nameSpec,self::$optionalSpecifications);
+        return $result;
     }
 }

@@ -2,12 +2,9 @@
 
 class Helper{
     
-    //  Display messages
-    
-    
     /**
      * Displays a simple message
-     * @param String $message
+     * @param string
      */
     public static function displayInfoMessage($message){
         
@@ -25,11 +22,20 @@ class Helper{
     
     /**
      * Displays green colored message
-     * @param String $message
+     * @param string
      */
     public static function displaySuccessMessage($message){
         
         echo '<p style="color:green">'.$message.'</p>';
+    }
+    
+    /**
+     * Displays a bold message
+     * @param string
+     */
+    public static function displayBoldMessage($message){
+        
+        echo '<p style="font-weight:bold">'.$message.'</p>';
     }
     
 }

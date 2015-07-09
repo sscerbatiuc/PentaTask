@@ -5,10 +5,10 @@ class BClass extends Automobile {
     const className     = "B-Class";
     const classPrice    = 25000;
     const airCondType   = "cond";
+    const airbagSlug    = "airbag";
     const airBagNumber  = 6;
 
     public function __construct() {
-        Helper::displayInfoMessage("B-Class constructor");
         parent::__construct(self::className, self::classPrice);
         $this->equipCar();
     }
@@ -17,7 +17,7 @@ class BClass extends Automobile {
         
         $specs =  SpecStorage::getCommonSpecifications();
         array_push($specs, SpecStorage::getSpecification(self::airCondType));
-        array_push($specs, SpecStorage::getSpecification("airbag",  self::airBagNumber));
+        array_push($specs, SpecStorage::getSpecification(self::airbagSlug,  self::airBagNumber));
         $this->assignDefaultSpecs($specs);
     }
 

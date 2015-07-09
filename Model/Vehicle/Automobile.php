@@ -7,12 +7,14 @@ abstract class Automobile {
     private $vehiclePrice;
     private $defaultSpecs;
     private $optionalSpecs;
+    private $discountOptions;
 
     public function __construct($class, $price) {
         $this->vehiclePrice = $price;
         $this->vehicleClass = $class;
-        $this->defaultSpecs = new SplObjectStorage();
-        $this->optionalSpecs = new SplObjectStorage();
+        $this->discountOptions = array();
+        $this->defaultSpecs = array();
+        $this->optionalSpecs = array();
     }
 
     /**
@@ -41,22 +43,6 @@ abstract class Automobile {
     public function setVehiclePrice($vehiclePrice) {
         $this->vehiclePrice = $vehiclePrice;
     }
-
-    /**
-     * Calculates the price of the vehicle with all the optional specifications 
-     * included
-     * @return string
-     */
-    public function calculatePrice() {
-        $recalculatedPrice = $this->getVehiclePrice();
-
-        foreach ($this->optionalSpecs as $optionalSpec) {
-
-            $recalculatedPrice += $optionalSpec->getPrice();
-        }
-
-        return $recalculatedPrice;
-    }
     
     /**
      * Displays the general information about the vehicle:
@@ -71,20 +57,21 @@ abstract class Automobile {
         return $generalInfo;
     }
 
-    /**
-     * TASK IV - view options for each car
+     /**
+     * Displays all the specifications of the Vehicle (Default & Optional)
      */
     public function viewAllSpecifications() {
 
         $this->viewDefaultSpecs();
         $this->viewOptionalSpecs();
     }
-    
+
     /**
-     * Visualise the default specifications of the car
+     * Displays the information about the default Specifications of the Vehicle
      */
+    //TODO override __toString() in the Spec class
     public function viewDefaultSpecs() {
-        $defaultSpecList = "Default specifications:";
+        $defaultSpecList = "<strong>Default specifications:</strong>";
         foreach ($this->defaultSpecs as $spec) {
             $defaultSpecList .= ('<br>' . $spec->getNameSpec());
             if ($spec->getQuantity() > 1) {
@@ -95,15 +82,11 @@ abstract class Automobile {
     }
 
     /**
-     * Visualise the optional specifications of the car
+     * Displays the optional specifications of the car
      */
     public function viewOptionalSpecs() {
-        $optionalSpecList = "Optional Specifications:";
-        if ($this->optionalSpecs == NULL) {
-
-            $this->optionalSpecs = new SplObjectStorage();
-        }
-        if ($this->optionalSpecs->count() == 0) {
+        $optionalSpecList = "<strong>Optional Specifications:</strong>";
+        if (empty($this->optionalSpecs)) {
             $optionalSpecList .= ('<br>' . "There are no optional specifications added for this vehicle");
         } else {
             foreach ($this->optionalSpecs as $optionalSpec) {
@@ -114,26 +97,61 @@ abstract class Automobile {
         Helper::displayInfoMessage($optionalSpecList);
     }
 
+    
+      
+    /**
+     * Adds the default specification to the Vehicle
+     * @param Spec $specification
+     */
+    public function addDefSpec(Spec $specification) {
+        $specName = $specification->getNameSpec();
+        $isSpecAdded = array_key_exists($specName, $this->defaultSpecs);
+        if (!$isSpecAdded) {
+            $this->defaultSpecs[$specName] = $specification;
+        } else {
+            Helper::displayErrorMessage("The specification is already added to the vehicle");
+        }
+    }
+
     /**
      * Assign the default specifications of a vehicle
      * @param array
      */
     public function assignDefaultSpecs($specsArray) {
-        $this->defaultSpecs = new SplObjectStorage();
+        $errorInfo = array();
         foreach ($specsArray as $defSpec) {
-            $this->defaultSpecs->attach($defSpec);
+            $specName = $defSpec->getNameSpec();
+            if (!array_key_exists($specName, $this->defaultSpecs)) {
+                $this->defaultSpecs[$specName] = $defSpec;
+            } else {
+                array_push($errorInfo, $specName);
+            }
+        }
+        if (!empty($errorInfo)) {
+            Helper::displayErrorMessage("These specifications are already assigned:");
+            foreach ($errorInfo as $spec) {
+                echo $spec . " ";
+            }
         }
     }
 
+    
     /**
      * Adds the optional specification to the Vehicle
      * @param Spec $optionalSpec
      */
-    public function equipOptionalSpec($optionalSpec) {
-        if ($this->optionalSpecs->contains($optionalSpec) == FALSE) {
-            $this->optionalSpecs->attach($optionalSpec);
+    public function equipOptionalSpec($specificationName) {
+
+        $specObject = SpecStorage::getSpecification($specificationName);
+        if (isset($specObject)) {
+            $isSpecAdded = array_key_exists($specificationName, $this->optionalSpecs);
+            if (!$isSpecAdded) {
+                $this->optionalSpecs[$specificationName] = $specObject;
+            } else {
+                Helper::displayErrorMessage("The specification: " . $specObject->getNameSpec() . " is already equipped");
+            }
         } else {
-            Helper::displayErrorMessage("The specification you are about to insert already exists");
+            
         }
     }
 
@@ -142,38 +160,114 @@ abstract class Automobile {
      * @param Spec[] $optionalSpecsArray
      */
     public function equipMultipleOptionalSpecs($optionalSpecsArray) {
-        try {
-            foreach ($optionalSpecsArray as $optionalSpec) {
-                echo 'Attempting to add optional spec: ' . $optionalSpec->getName();
-                $this->optionalSpecs->attach($optionalSpec);
+        foreach ($optionalSpecsArray as $optionalSpec) {
+            $specName = $optionalSpec->getNameSpec();
+            $isSpecAdded = array_key_exists($specName, $this->optionalSpecs);
+            if (!$isSpecAdded) {
+                $this->optionalSpecs[$specName] = $optionalSpec;
+            } else {
+                Helper::displayErrorMessage("The specification: " . $specName . " is already equipped");
             }
-        } catch (Exception $ex) {
-            echo $ex->getTraceAsString();
+        }
+    }
+    
+
+    /**
+     * Checks if an optional specification is assigned to the vehicle -> deletes it
+     * @param type $specification
+     */
+    public function deleteSpec($specName) {
+
+
+        $specificationExists = SpecStorage::getSpecification($specName);
+        if (!isset($specificationExists)) {
+            Helper::displayErrorMessage("There is no such specification: " . $specName);
+        } else {
+            $isEquipped = isset($this->optionalSpecs[$specName]);
+            if ($isEquipped) {
+                Helper::displayInfoMessage("DELETING optional specification: " . $this->optionalSpecs[$specName]->getNameSpec());
+                $deletedSpec = $this->optionalSpecs[$specName]->getNameSpec();
+                unset($this->optionalSpecs[$specName]);
+                Helper::displaySuccessMessage("The specification (" . $deletedSpec . ") was successfully deleted");
+            } else {
+                Helper::displayErrorMessage("This car is not equipped with: " . $specificationExists->getNameSpec());
+            }
+        }
+    }
+    
+    
+    /**
+     * Adds discount options to the vehicle. 
+     * Therefore, the price will be calculated with the discount value taken into account.
+     * @param Reduceri $discountOption
+     */
+    public function addDiscountOption(Reduceri $discountOption) {
+        $optionClass = get_class($discountOption);
+        $isOptionAdded = array_key_exists($optionClass, $this->discountOptions);
+        if (!$isOptionAdded) {
+            $this->discountOptions[$optionClass] = $discountOption;
+            $this->rangeDiscountOptions();
+        } else {
+            Helper::displayErrorMessage("The discount option is already assigned to the vehicle");
+        }
+    }
+    
+     /**
+     * Ranges the applicable discount options, depending on the order of each option
+     */
+    public function rangeDiscountOptions() {
+        usort($this->discountOptions, array("Automobile", "compareDiscountOptions"));
+    }
+    
+
+    /**
+     * Displays all the available discount options applicable for the vehicle
+     */
+    public function viewDiscountOptions() {
+        echo $this;
+        Helper::displayInfoMessage("The discount options available for this vehicle");
+        foreach ($this->discountOptions as $option) {
+            echo $option;
         }
     }
 
     /**
-     * Checks if a specification is assigned to the vehicle -> deletes it
-     * @param type $specification
+     * Compares the discount options applicable for the vehicle by their orders
+     * @param Reduceri $option1
+     * @param Reduceri $option2
+     * @return int &lt; 0 if <i>order1</i> is less than
+     * <i>order2</i>; &gt; 0 if <i>order1</i>
+     * is greater than <i>order2</i>, and 0 if they are
+     * equal.
      */
-    //TODO redefine the logic of deleting optional specifications
-    /* Deleting specifications by name: check if a specification with specific SLUG exists */
-    public function deleteSpec(Spec $specification) {
+    public function compareDiscountOptions(Reduceri $option1, Reduceri $option2) {
 
-        Helper::displayInfoMessage("Deleting optional specifications");
+        return strcmp($option1->getOrder(), $option2->getOrder());
+    }
+    
+   
+    /**
+     * Calculates the price of the vehicle with all the optional specifications 
+     * included
+     * @return string
+     */
+    public function calculatePrice() {
+        $price = $this->getVehiclePrice();
+        $recalculatedPrice = number_format($price, 2, ".", "");
+        foreach ($this->optionalSpecs as $optionalSpec) {
 
-        if ($this->optionalSpecs == NULL) {
-
-            $this->optionalSpecs = new SplObjectStorage();
+            $recalculatedPrice += ($optionalSpec->getPrice());
         }
-        if ($this->optionalSpecs->contains($specification)) {
 
-            Helper::displayInfoMessage("You are about to remove the specification:"
-                    . $specification->getNameSpec() . " Price:" . $specification->getPrice() . "&#8364");
-            $this->optionalSpecs->detach($specification);
-        } else {
-            Helper::displayErrorMessage("This car is not equipped with:" . $specification->getNameSpec());
+        foreach ($this->discountOptions as $discountOption) {
+            if ($discountOption->getIsActive()) {
+                $type = $discountOption->getDiscountType();
+                $reductionValue = $discountOption->getDiscountValue();
+                (($type == 1) ? $recalculatedPrice -= $reductionValue :
+                                $recalculatedPrice -= ($recalculatedPrice * $reductionValue) );
+            }
         }
+        return $recalculatedPrice . "&#8364";
     }
 
 }

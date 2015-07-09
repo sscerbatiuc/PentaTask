@@ -1,73 +1,100 @@
 <?php
 
-class Reduceri implements OrderingInterface {
-
-    private $discountValue;
-    private $startDate;
-    private $finishDate;
-    private $isVip;
-    private $order;
-    private static $lastOrder = 0;
+abstract class Reduceri implements OrderingInterface {
     
+    const fixedDiscount = 1;
+    const percentDiscount= 0;
+    
+    private $order;
+    
+    private $description;
+    
+    /**
+     * Sets whether the option is active or not
+     * @var boolean 
+     */
+    private $isActive;
+    
+    /**
+     * Defines the discount value of the option
+     * @var int 
+     */
+    private $discountValue;
+    
+    /**
+     *Defines the type of the discount: Fixed or Percent
+     * @var int 0 - Percent; 1 - Fixed
+     */
+    private $discountType;
+    
+    /**
+     * Defines when the discount option is active
+     */
+    abstract public function isActive();
+    
+    /**
+     * Displays all the information about the discount option
+     */
+    abstract public function __toString();
+
     //GETTERS
-    function getStartDate() {
-        return $this->startDate;
-    }
-
-    function getFinishDate() {
-        return $this->finishDate;
-    }
-
+    
     function getDiscountValue() {
         return $this->discountValue;
     }
-
-    function getIsVip() {
-        return $this->isVip;
+    
+    /**
+     * Returns a short description of each discount option
+     * @return string
+     */
+    function getDescription() {
+        return $this->description;
     }
     
-    function getLastOrder(){
-        return self::$lastOrder;
+    /**
+     * Checks whether the option is active or not
+     * @return boolean TRUE, when active, FALSE - otherwise
+     */
+    function getIsActive() {
+        return $this->isActive;
+    }
+    
+    /**
+     * Returns the order of application of the discount option
+     * @return int Lower order - higher priority
+     */
+    public function getOrder() {
+        return $this->order;
+    }
+    
+    /**
+     * Returns the type of the discount option: Fixed - discount value is substracted
+     * directly; Percent - the discount value is calculated (%)
+     * @return int 1 - Fixed, 0 - Percent
+     */
+    function getDiscountType() {
+        return $this->discountType;
     }
 
+    
     //SETTERS
-    function setStartDate($startDate) {
-        $this->startDate = $startDate;
-    }
-
-    function setFinishDate($finishDate) {
-        $this->finishDate = $finishDate;
-    }
-
     function setDiscountValue($discountValue) {
         $this->discountValue = $discountValue;
     }
 
-    function setIsVip($isVip) {
-        $this->isVip = $isVip;
+    function setIsActive($isActive) {
+        $this->isActive = $isActive;
+    }
+
+    function setDescription($description) {
+        $this->description = $description;
     }
 
     function setOrder($order) {
         $this->order = $order;
     }
-
-    /**
-     * Checks whether a specific promotion is active at the moment
-     * Veryfies if the current date is between the start 
-     * @return boolean
-     */
-    public function isActive() {
-
-        $result = Time::checkIfBetween($this->startDate, $this->finishDate);
-        return $result;
+    
+    function setDiscountType($discountType) {
+        $this->discountType = $discountType;
     }
-
-    public function getOrder() {
-        return $this->order;
-    }
-
-    public function __toString() {
-        return "Start date: " . $this->getStartDate()." End Date: ".$this->getFinishDate()." Discount: ".$this->discountValue." Order:".$this->getOrder();
-    }
-
 }
