@@ -109,6 +109,11 @@ class SpecStorage{
         
     }
     
+    /**
+     * Checks whether a specification exists and can be created
+     * @param type $nameSpec
+     * @return type
+     */
     public static function checkSpec($nameSpec){
         $result = array_key_exists($nameSpec,self::$optionalSpecifications);
         return $result;
